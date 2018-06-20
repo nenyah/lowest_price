@@ -9,6 +9,14 @@ from scrapy.contrib.exporter import CsvItemExporter
 import datetime
 today = datetime.date.today()
 
+_path = r"E:\伊婉销售情况"
+s_name = {
+    'soyoung': '新氧',
+    'yuemei': '悦美',
+    'taobao':'淘宝',
+    'meituan':'美团'
+}
+
 
 class LowestPricePipeline(object):
     @classmethod
@@ -19,7 +27,8 @@ class LowestPricePipeline(object):
         return pipeline
 
     def spider_opened(self, spider):
-        self.file = open(f'{today}伊婉销售情况.csv', 'w+b')
+        self.file = open(
+            f'{_path}/{today}伊婉{s_name[spider.name]}销售情况.csv', 'w+b')
         self.exporter = CsvItemExporter(self.file)
         self.exporter.start_exporting()
 

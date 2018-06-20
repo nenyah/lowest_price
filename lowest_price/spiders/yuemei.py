@@ -10,11 +10,17 @@ class YuemeiSpider(scrapy.Spider):
     start_urls = ['https://so.yuemei.com/tao/%E4%BC%8A%E5%A9%89/p1.html']
 
     def parse(self, response):
-        page_links = response.xpath(
-            '//a[@class="taoItem _yma"]/@href').extract()
-        print(page_links)
-        for link in page_links:
-            yield scrapy.Request(link, callback=self.parse_page)
+        list_info = response.xpath('//a[@class="taoItem _yma"]')
+        if list_info is None:
+            raise CloseSpider(reason='cancelled')
+
+        for info in list_info:
+            item = LowestPriceItem()
+            item['link'] = info.xpath('./@href').extract_first()
+            item['hospital_name'] = self.__get_hospital_name(info)
+            item['title'] = self.__get_title(info)
+            item['price'] = self.__get_price(info)
+            yield item
 
         next_page = response.xpath(
             '//a[@class="next-page-btn"]/@href').extract_first()
@@ -22,18 +28,31 @@ class YuemeiSpider(scrapy.Spider):
             next_page_url = f"https://so.yuemei.com/{next_page}"
             yield scrapy.Request(next_page_url, callback=self.parse)
 
-    def parse_page(self, response):
-        item = LowestPriceItem()
-        item['link'] = response.url
-        item['hospital_name'] = response.xpath(
-            '//a[@id="HosName"]/text()').extract_first()
-        item['title'] = response.xpath('//h2/text()').extract_first()
-        item['price'] = self.__get_price(response)
-        yield item
+    def __get_title(self, response):
+        result = response.xpath(
+            './/p[@class="listInfo-item2"]/text()').extract_first().strip()
+
+        if result is None:
+            raise AttributeError('title is None')
+        return result
+
+    def __get_hospital_name(self, response):
+        result = response.xpath(
+            './/p[@class="listInfo-item4"]/text()').extract_first().strip()
+
+        if result is None:
+            raise AttributeError('hospital name is None')
+        return result
 
     def __get_price(self, response):
-        price = response.xpath('//span[@class="priceNum"]//text()').extract()
-        price = re.findall(r'\w+', ''.join(price))
-        price.insert(1, '/')
-        price = ''.join(price)
-        return price
+        result = response.xpath(
+            './/p[@class="ymPrice"]//text()').extract()
+
+        if result is None:
+            raise AttributeError('price is None')
+
+        result = re.findall(r'\w+', ''.join(result))
+        if len(result) > 1:
+            result.insert(1, '/')
+        result = ''.join(result)
+        return result

@@ -14,6 +14,10 @@ BOT_NAME = 'lowest_price'
 SPIDER_MODULES = ['lowest_price.spiders']
 NEWSPIDER_MODULE = 'lowest_price.spiders'
 
+MONGODB_SERVER = "localhost"  # 数据库host，也可以写成127.0.0.1
+MONGODB_PORT = 27017  # 数据库Port
+MONGODB_DB = "huadong"  # 数据库名
+MONGODB_COLLECTION = "ivaprice"  # 数据库表名
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'lowest_price (+http://www.yourdomain.com)'
