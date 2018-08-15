@@ -15,7 +15,10 @@ class TaobaoSpider(scrapy.Spider):
     def parse(self, response):
         data = re.findall('g_page_config = (\{.+\})', response.text)[0]
         data = json.loads(data)
-        items = data['mods']['itemlist']['data']['auctions']
+        try:
+            items = data['mods']['itemlist']['data']['auctions']
+        except:
+            self.logger.info('data empty')
 
         for info in items:
             item = LowestPriceItem()

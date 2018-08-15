@@ -97,3 +97,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+REDIRECT_ENABLED = False
+LOG_FILE = "mySpider.log"
+LOG_LEVEL = "INFO"

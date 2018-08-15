@@ -5,7 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from scrapy import signals
-from scrapy.contrib.exporter import CsvItemExporter
+from scrapy.exporters import CsvItemExporter
 import datetime
 today = datetime.date.today()
 
@@ -13,8 +13,8 @@ _path = r"E:\伊婉销售情况"
 s_name = {
     'soyoung': '新氧',
     'yuemei': '悦美',
-    'taobao':'淘宝',
-    'meituan':'美团'
+    'taobao': '淘宝',
+    'meituan': '美团'
 }
 
 
