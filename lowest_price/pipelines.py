@@ -9,7 +9,7 @@ from scrapy.exporters import CsvItemExporter
 import datetime
 today = datetime.date.today()
 
-_path = r"E:\伊婉销售情况"
+_path = r"/home/steven/sales_collect"
 s_name = {
     'soyoung': '新氧',
     'yuemei': '悦美',
