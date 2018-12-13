@@ -31,4 +31,5 @@ class TaobaoSpider(scrapy.Spider):
         if self.offset < 2000:
             self.offset += 44
             url = self.base_url + str(self.offset)
+
             yield scrapy.Request(url, callback=self.parse)
